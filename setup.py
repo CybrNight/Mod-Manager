@@ -4,12 +4,12 @@ from cx_Freeze import *
 
 base = "Win32GUI"
 
-os.environ['TCL_LIBRARY'] = "C:\\Users\\naest_000\\AppData\Local\Programs\\Python\\Python36\\tcl\\tcl8.6"
-os.environ['TK_LIBRARY'] = "C:\\Users\\naest_000\\AppData\\Local\\Programs\\Python\\Python36\\tcl\\tk8.6"
+os.environ['TCL_LIBRARY'] = "%localappdata%\Programs\\Python\\Python36\\tcl\\tcl8.6"
+os.environ['TK_LIBRARY'] = "%localappdata%\Programs\\Python\\Python36\\tcl\\tk8.6"
 
 includes      = []
-include_files = ["C:\\Users\\naest_000\\AppData\\Local\\Programs\\Python\\Python36\\DLLs\\tcl86t.dll",
-                 "C:\\Users\\naest_000\\AppData\\Local\\Programs\\Python\\Python36\\DLLs\\tk86t.dll"]
+include_files = ["%localappdata%\Programs\\Python\\Python36\\DLLs\\tcl86t.dll",
+                 "%localappdata%\AppData\\Local\\Programs\\Python\\Python36\\DLLs\\tk86t.dll"]
 
 setup(
     name = "Mod Manager",
