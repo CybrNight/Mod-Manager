@@ -2,10 +2,12 @@ import sys
 import os
 from cx_Freeze import *
 
+APPDATA = os.getenv("APPDATA")
+
 base = "Win32GUI"
 
-os.environ['TCL_LIBRARY'] = "%localappdata%\Programs\\Python\\Python36\\tcl\\tcl8.6"
-os.environ['TK_LIBRARY'] = "%localappdata%\Programs\\Python\\Python36\\tcl\\tk8.6"
+os.environ['TCL_LIBRARY'] = APPDATA+"\Programs\\Python\\Python36\\tcl\\tcl8.6"
+os.environ['TK_LIBRARY'] = APPDATA+"\Programs\\Python\\Python36\\tcl\\tk8.6"
 
 includes      = []
 include_files = ["%localappdata%\Programs\\Python\\Python36\\DLLs\\tcl86t.dll",
