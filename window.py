@@ -20,8 +20,9 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Mods Folder",font=LARGE_FONT)
         label.place(x=32,y=96)
 
-        self.modDir = tk.Text(self,width=40,height=1)
+        self.modDir = tk.Entry(self,width=40)
         self.modDir.place(x=192,y=96)
+        self.modDir.bind("<Return>",lambda x:self.buildList())
 
         self.modList = tk.Listbox(self,width=75,height=20)
         self.modList.place(x=32,y=128)
@@ -35,16 +36,25 @@ class StartPage(tk.Frame):
         addBtn = tk.Button(self,text="Add File(s)",command=lambda :self.copyFile())
         addBtn.place(x=520,y=128)
 
+        addFolder = tk.Button(self,text="Add Folder",command=lambda :self.copyFolder())
+        addFolder.place(x=520,y=160)
+
         delBtn = tk.Button(self,text="Delete Selected",command=lambda :self.deleteFile())
-        delBtn.place(x=520,y=160)
+        delBtn.place(x=520,y=192)
 
         dirBrowse = tk.Button(self,text="...",command=lambda :self.openDirectory())
         dirBrowse.place(x=520,y=94)
 
     def openDirectory(self):
         directory = tkFile.askdirectory()
-        self.modDir.insert('1.0', directory)
-        self.mod = directory
+
+        try:
+            self.modDir.delete(0,tk.END)
+        except SyntaxError:
+            print("None")
+
+        self.modDir.insert(0,directory)
+        self.mod = self.modDir.get()
         print(self.mod)
         self.buildList()
 
@@ -58,6 +68,16 @@ class StartPage(tk.Frame):
 
         self.buildList()
 
+    def copyFolder(self):
+        if (self.mod == ""): return
+
+        filePath = tkFile.askdirectory()
+
+        shutil.copytree(filePath,self.mod)
+
+        self.buildList()
+
+
 
     def deleteFile(self):
         if (self.mod == ""): return
@@ -69,9 +89,14 @@ class StartPage(tk.Frame):
             self.modList.delete(select)
 
     def buildList(self):
-        self.modList.delete(0,self.modList.size())
+        try:
+            self.mod = self.modDir.get()
+            self.modList.delete(0,self.modList.size())
 
-        all = os.listdir(self.mod)
-        for file in all:
-            self.modList.insert(tk.END,file+os.path.commonpath(file))
-            print(os.path.commonpath(file).upper())
+            all = os.listdir(self.mod)
+            for file in all:
+                self.modList.insert(tk.END,file+os.path.commonpath(file))
+                print(os.path.commonpath(file).upper())
+        except FileNotFoundError:
+            self.modList.delete(0,self.modList.size())
+            self.modList.insert(0,"Invalid Path!")
