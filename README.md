@@ -12,4 +12,5 @@ If you want to compile this yourself instead of running from source if the relea
 1. Install Python 3.6
 2. Download latest commit version and extract
 3. Open CMD/Terminal
-4. Run the setup.py for your platform. (mac_setup.py should work for Linux too, but I can't test it out)
+4. Navigate to extracted source and run the setup file for your platform (ex. python3.6 setup.py mac_setup.py)
+5. Build should be saved in build folder in root project directory
