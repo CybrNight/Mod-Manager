@@ -20,11 +20,11 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Mods Folder",font=LARGE_FONT)
         label.place(x=32,y=96)
 
-        self.modDir = tk.Entry(self,width=40)
+        self.modDir = tk.Entry(self,width=35)
         self.modDir.place(x=192,y=96)
         self.modDir.bind("<Return>",lambda x:self.buildList())
 
-        self.modList = tk.Listbox(self,width=75,height=20)
+        self.modList = tk.Listbox(self,width=50,height=20)
         self.modList.place(x=32,y=128)
 
         #scrollbar = tk.Scrollbar(self.modList,orient=tk.VERTICAL)
@@ -73,7 +73,7 @@ class StartPage(tk.Frame):
 
         filePath = tkFile.askdirectory()
 
-        shutil.copytree(filePath,self.mod)
+        shutil.copytree(filePath,self.mod+"/"+os.path.basename(filePath))
 
         self.buildList()
 
@@ -82,7 +82,12 @@ class StartPage(tk.Frame):
     def deleteFile(self):
         if (self.mod == ""): return
 
-        os.remove(self.mod+"/"+self.modList.get(tk.ACTIVE))
+        file = self.mod+"/"+self.modList.get(tk.ACTIVE)
+
+        if (os.path.isfile(file)):
+            os.remove(file)
+        else:
+            shutil.rmtree(file)
 
         selected = self.modList.curselection()
         for select in selected:
