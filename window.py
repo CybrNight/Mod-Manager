@@ -42,7 +42,7 @@ class StartPage(tk.Frame):
         delBtn = tk.Button(self,text="Delete Selected",command=lambda :self.deleteFile())
         delBtn.place(x=520,y=192)
 
-        dirBrowse = tk.Button(self,text="...",command=lambda :self.openDirectory())
+        dirBrowse = tk.Button(self,text="Browse...",command=lambda :self.openDirectory())
         dirBrowse.place(x=520,y=94)
 
     def openDirectory(self):
@@ -61,7 +61,7 @@ class StartPage(tk.Frame):
     def copyFile(self):
         if (self.mod == ""): return
 
-        filesPaths = tkFile.askopenfilenames(filetypes=[("All Files","*")])
+        filesPaths = tkFile.askopenfilenames()
 
         for filePath in filesPaths:
             shutil.copy2(filePath,self.mod)
