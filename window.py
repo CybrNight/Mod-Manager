@@ -9,6 +9,7 @@ class StartPage(tk.Frame):
         TITLE_FONT = ("Verdana",16)
 
         self.mod = ""
+        self.validPath = False
 
         tk.Frame.__init__(self,parent)
 
@@ -33,6 +34,10 @@ class StartPage(tk.Frame):
         #self.modList.config(yscrollcommand=scrollbar.set)
         #scrollbar.config(command=self.modList.yview)
 
+        dirBrowse = tk.Button(self,text="Browse...",command=lambda :self.openDirectory())
+        dirBrowse.place(x=520,y=94)
+
+    def addButtons(self):
         addBtn = tk.Button(self,text="Add File(s)",command=lambda :self.copyFile())
         addBtn.place(x=520,y=128)
 
@@ -41,9 +46,6 @@ class StartPage(tk.Frame):
 
         delBtn = tk.Button(self,text="Delete Selected",command=lambda :self.deleteFile())
         delBtn.place(x=520,y=192)
-
-        dirBrowse = tk.Button(self,text="Browse...",command=lambda :self.openDirectory())
-        dirBrowse.place(x=520,y=94)
 
     def openDirectory(self):
         directory = tkFile.askdirectory()
@@ -59,7 +61,7 @@ class StartPage(tk.Frame):
         self.buildList()
 
     def copyFile(self):
-        if (self.mod == ""): return
+        if (self.validPath is not True): return
 
         filesPaths = tkFile.askopenfilenames()
 
@@ -69,7 +71,7 @@ class StartPage(tk.Frame):
         self.buildList()
 
     def copyFolder(self):
-        if (self.mod == ""): return
+        if (self.validPath is not True): return
 
         filePath = tkFile.askdirectory()
 
@@ -80,7 +82,7 @@ class StartPage(tk.Frame):
 
 
     def deleteFile(self):
-        if (self.mod == ""): return
+        if (self.validPath is not True): return
 
         file = self.mod+"/"+self.modList.get(tk.ACTIVE)
 
@@ -102,6 +104,9 @@ class StartPage(tk.Frame):
             for file in all:
                 self.modList.insert(tk.END,file+os.path.commonpath(file))
                 print(os.path.commonpath(file).upper())
+            self.validPath = True
+            self.addButtons()
         except FileNotFoundError:
+            self.validPath = False
             self.modList.delete(0,self.modList.size())
             self.modList.insert(0,"Invalid Path!")
