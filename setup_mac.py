@@ -1,4 +1,4 @@
-application_title = "Death Dodger 1.0"
+application_title = "Mod Manager"
 main_python_file = "main.py"
 
 import sys
@@ -13,7 +13,7 @@ includes = ["atexit","re"]
 
 setup(
     name = application_title,
-    version = "1.0",
+    version = "1.1",
     description = "Sample cx_Freeze PyQt4 script",
     options = {
         "build_exe" : {
