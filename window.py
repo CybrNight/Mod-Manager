@@ -10,24 +10,29 @@ class StartPage(tk.Frame):
 
         self.mod = ""
         self.validPath = False
+        self.selectedItem = tk.StringVar()
 
         tk.Frame.__init__(self,parent)
 
         title = tk.Label(self,text="Universal Mod Manager",font=TITLE_FONT)
-        title.pack(side="top")
+        title.grid(row=0,column=2)
         title = tk.Label(self,text="Manager for all your mods",font=LARGE_FONT)
-        title.pack(side="top")
+        title.grid(row=1,column=2)
 
         label = tk.Label(self, text="Mods Folder",font=LARGE_FONT)
-        label.place(x=32,y=96)
+        label.grid(row=3,column=1)
 
-        self.modDir = tk.Entry(self,width=35)
-        self.modDir.place(x=192,y=96)
+        label1 = tk.Label(self, text="Mods List",font=LARGE_FONT)
+        label1.grid(row=4,column=2)
+
+        self.modDir = tk.Entry(self,width=60)
+        self.modDir.grid(row=3,column=2,sticky="E")
         self.modDir.bind("<Return>",lambda x:self.buildList())
 
-        self.modList = tk.Listbox(self,width=50,height=20)
-        self.modList.place(x=32,y=128)
+        self.modList = tk.Listbox(self,width=60,height=20)
+        self.modList.grid(row=5,column=2)
         self.modList.bind("<Delete>",lambda x:self.deleteFile())
+        self.modList.bind("<Button-1>",lambda x:self.setSelected())
 
         #scrollbar = tk.Scrollbar(self.modList,orient=tk.VERTICAL)
         #scrollbar.pack(side=tk.RIGHT,fill=tk.Y)
@@ -36,17 +41,17 @@ class StartPage(tk.Frame):
         #scrollbar.config(command=self.modList.yview)
 
         dirBrowse = tk.Button(self,text="Browse...",command=lambda :self.openDirectory())
-        dirBrowse.place(x=520,y=94)
+        dirBrowse.grid(column=3,row=3,padx=10)
 
     def addButtons(self):
         self.addBtn = tk.Button(self,text="Add File(s)",command=lambda :self.copyFile())
-        self.addBtn.place(x=520,y=128)
+        self.addBtn.grid(row=5,column=3,sticky="NW")
 
         self.addFolder = tk.Button(self,text="Add Folder",command=lambda :self.copyFolder())
-        self.addFolder.place(x=520,y=160)
+        self.addFolder.grid(row=5,column=3,pady=40,sticky="NW")
 
         self.delBtn = tk.Button(self,text="Delete Selected",command=lambda :self.deleteFile())
-        self.delBtn.place(x=520,y=192)
+        self.delBtn.grid(row=5,column=3,pady=80,sticky="NW")
 
     def deleteButtons(self):
         self.addBtn.destroy()
@@ -87,12 +92,13 @@ class StartPage(tk.Frame):
 
         self.buildList()
 
-
+    def setSelected(self):
+        self.selectedItem.set(self.modList.get(tk.ACTIVE))
 
     def deleteFile(self):
         if (self.validPath is not True): return
 
-        file = self.mod+"/"+self.modList.get(tk.ACTIVE)
+        file = self.mod+"/"+self.selectedItem.get()
 
         if (os.path.isfile(file)):
             os.remove(file)
