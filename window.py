@@ -27,6 +27,7 @@ class StartPage(tk.Frame):
 
         self.modList = tk.Listbox(self,width=50,height=20)
         self.modList.place(x=32,y=128)
+        self.modList.bind("<Delete>",lambda x:self.deleteFile())
 
         #scrollbar = tk.Scrollbar(self.modList,orient=tk.VERTICAL)
         #scrollbar.pack(side=tk.RIGHT,fill=tk.Y)
@@ -38,17 +39,24 @@ class StartPage(tk.Frame):
         dirBrowse.place(x=520,y=94)
 
     def addButtons(self):
-        addBtn = tk.Button(self,text="Add File(s)",command=lambda :self.copyFile())
-        addBtn.place(x=520,y=128)
+        self.addBtn = tk.Button(self,text="Add File(s)",command=lambda :self.copyFile())
+        self.addBtn.place(x=520,y=128)
 
-        addFolder = tk.Button(self,text="Add Folder",command=lambda :self.copyFolder())
-        addFolder.place(x=520,y=160)
+        self.addFolder = tk.Button(self,text="Add Folder",command=lambda :self.copyFolder())
+        self.addFolder.place(x=520,y=160)
 
-        delBtn = tk.Button(self,text="Delete Selected",command=lambda :self.deleteFile())
-        delBtn.place(x=520,y=192)
+        self.delBtn = tk.Button(self,text="Delete Selected",command=lambda :self.deleteFile())
+        self.delBtn.place(x=520,y=192)
+
+    def deleteButtons(self):
+        self.addBtn.destroy()
+        self.addFolder.destroy()
+        self.delBtn.destroy()
 
     def openDirectory(self):
         directory = tkFile.askdirectory()
+        if (directory == "" and self.mod is not "" and self.validPath):
+            directory = self.mod
 
         try:
             self.modDir.delete(0,tk.END)
@@ -110,3 +118,4 @@ class StartPage(tk.Frame):
             self.validPath = False
             self.modList.delete(0,self.modList.size())
             self.modList.insert(0,"Invalid Path!")
+            self.deleteButtons()
